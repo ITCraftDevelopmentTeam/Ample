@@ -1,0 +1,25 @@
+sync-command: "指令同步成功！"
+
+setu:
+  error:
+    api: "调用 `api` 时出错: `{{ data['error'] }}`"
+  sfw: "此频道不允许 `nsfw` 内容，`r18` 选项已设为 `False`"
+  text: |-
+    标题: {{ title }}
+    作者: {{ author }}
+    uid: `{{ uid }}` pid: `{{ pid }}` p: `{{ p }}`
+    上传时间: {{ time }}
+    大小: `{{ width }}x{{ height }}` r18: `{{ r18 }}` AI: `{{ ["Unknown", "False", "True"][aiType] }}`
+    标签:
+    - {{ '\n- '.join(tags) }}
+    URL: `{{ url }}`
+  filename: "{{ pid }}_p{{ p }}.{{ ext }}"
+  description: "{{ ' '.join(tags) }}"
+
+pixiv:
+  text: |-
+    pid: `{{ pid }}` p: `{{ p }}`
+    上传时间: {{ time }}
+    URL: `{{ url }}`
+  filename: "{{ pid }}_p{{ p }}.{{ ext }}"
+  description: "{{% pixiv.filename %}}"
