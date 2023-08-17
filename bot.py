@@ -1,9 +1,8 @@
 from pathlib import Path
-from types import ModuleType
 
 import yaml
 from discord import Intents
-from discord.ext.commands import Bot, Context, has_permissions
+from discord.ext.commands import Bot, Context
 
 from plugins._lang import text
 

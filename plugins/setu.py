@@ -2,7 +2,7 @@ from datetime import datetime
 from dateutil.tz import gettz as tz
 from functools import partial
 from io import BytesIO
-from typing import Literal, Optional, cast
+from typing import Literal, cast
 
 import aiohttp
 from discord import File
