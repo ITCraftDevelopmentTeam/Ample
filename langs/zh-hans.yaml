@@ -1,8 +1,12 @@
-sync-command: "指令同步成功！"
+sync-command: "指令同步成功"
+
+lang:
+  set: "已成功设置语言为：{{ lang }}"
 
 setu:
   error:
     api: "调用 `api` 时出错: `{{ data['error'] }}`"
+    no-image: "没有符合条件的图片"
   sfw: "此频道不允许 `nsfw` 内容，`r18` 选项已设为 `False`"
   text: |-
     标题: {{ title }}
@@ -23,3 +27,4 @@ pixiv:
     URL: `{{ url }}`
   filename: "{{ pid }}_p{{ p }}.{{ ext }}"
   description: "{{% pixiv.filename %}}"
+  proxy-url: "https://pixiv.re/{{ pid }}{{ f'-{p + 1}' if p else '' }}.{{ ext }}"

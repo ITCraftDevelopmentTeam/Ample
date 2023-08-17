@@ -18,7 +18,7 @@ bot = Bot(command_prefix="$", intents=intents)
 async def sync_command(ctx: Context) -> None:
     assert ctx.author.name in config["superusers"]
     await bot.tree.sync()
-    await ctx.send(text(ctx, "sync-command"))
+    await ctx.send(text("sync-command"))
 
 
 for path in Path("plugins").glob("[!_]*"):

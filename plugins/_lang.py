@@ -1,8 +1,9 @@
 import re
+import sys
 import traceback
 from functools import partial
 from pathlib import Path
-from typing import Optional, Any, Literal   # this `Literal` is for `eval`
+from typing import Optional, Literal, Any, cast  # this `Literal` is for `eval`
 
 import yaml
 from discord.ext.commands import Context
@@ -10,7 +11,7 @@ from discord.ext.commands import Context
 from ._store import Json
 
 
-lang_use = Json("lang_use.json", lambda: "zh-hans")
+lang_users = Json("lang.users.json", lambda: "zh-hans")
 langs = {}
 for path in Path("langs").glob("[!_]*"):
     with open(path, "r", encoding="utf-8") as file:
@@ -21,11 +22,11 @@ LangType = Optional[LangTag | str | Context]
 
 def get_lang(lang: LangType) -> LangTag:
     if lang is None:
-        return lang_use.default_factory()
+        return lang_users.default_factory()
     if hasattr(lang, "author"):
         lang = lang.author.name
     if lang not in langs.keys():
-        lang = lang_use[lang]
+        lang = lang_users[lang]
     return lang
 
 
@@ -53,7 +54,7 @@ def parse(__string: str, __lang: LangType = None, /, **kwargs: Any) -> str:
             }))
         except Exception:
             exc = traceback.format_exc().split("\n")
-            exc = "\n".join([exc[0], *exc[4:]])  # remove `eval` layer
+            exc = "\n".join([exc[0], *exc[4:]])     # Remove `eval` frame.
             return f"```{exc}```"
 
     # embedded Python code
@@ -62,14 +63,18 @@ def parse(__string: str, __lang: LangType = None, /, **kwargs: Any) -> str:
 
 
 def text(
-    __lang: Optional[LangType],
     __key: str,
-    /,
-    prefix: Optional[str] = "",
+    __lang: Optional[LangType] = None,
+    /, *,
     escape_blank_key: bool = True,
     **kwargs: Any
 ) -> Optional[Any]:
-    lang, key = get_lang(__lang), prefix + __key
+    caller = sys._getframe(1)
+    if __lang is None and "ctx" in caller.f_locals.keys():
+        __lang = caller.f_locals["ctx"]
+    lang, key = get_lang(__lang), __key
+    if key.startswith("."):     # `.xxx` -> `{command}.xxx`
+        key = cast(str, caller.f_globals["__name__"]).split(".")[-1] + key
 
     def gets(data: dict, key: str) -> Optional[Any]:
         for subkey in key.split("."):
@@ -79,7 +84,7 @@ def text(
     try:
         data = gets(langs[lang], key)
     except KeyError:
-        lang = lang_use.default_factory()
+        lang = lang_users.default_factory()
         data = gets(langs[lang], key)
 
     if escape_blank_key and isinstance(data, dict) and "" in data.keys():
