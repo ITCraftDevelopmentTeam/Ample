@@ -5,8 +5,8 @@ lang:
 
 setu:
   error:
+    no-exist: "没有符合条件的图片"
     api: "调用 `api` 时出错: `{{ data['error'] }}`"
-    no-image: "没有符合条件的图片"
   sfw: "此频道不允许 `nsfw` 内容，`r18` 选项已设为 `False`"
   text: |-
     标题: {{ title }}
@@ -21,6 +21,7 @@ setu:
   description: "{{ ' '.join(tags) }}"
 
 pixiv:
+  no-exist: "图片不存在"
   text: |-
     pid: `{{ pid }}` p: `{{ p }}`
     上传时间: {{ time }}

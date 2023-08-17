@@ -23,6 +23,9 @@ async def pixiv(
         async with session.get(url) as response:
             await ctx.defer()
             content = await response.read()
+            if "x-origin-url" not in response.headers.keys():
+                await ctx.send(text(".no-exist"))
+                return
             origin_url = response.headers["x-origin-url"]
         pattern = (
             r"https://i\.pximg\.net/img-original/img/"

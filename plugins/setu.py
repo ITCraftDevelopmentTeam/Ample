@@ -41,7 +41,7 @@ async def setu(
             await ctx.send(text(".error.api", data=data))
             return
         if not data["data"]:
-            await ctx.send(text(".error.no-image", data=data))
+            await ctx.send(text(".error.no-exist", data=data))
             return
         for pic in cast(list[dict], data["data"]):
             time = datetime.fromtimestamp(pic["uploadDate"] / 1000, tz("PRC"))
