@@ -29,7 +29,6 @@ for path in Path("plugins").glob("[!_]*"):
     for command in commands:
         bot.command()(command)
     for hybrid_command in hybrid_commands:
-        print("注册hybrid指令:", hybrid_command)
         bot.hybrid_command()(hybrid_command)
 
 
