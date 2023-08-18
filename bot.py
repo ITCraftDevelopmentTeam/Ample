@@ -1,4 +1,6 @@
+from importlib import import_module
 from pathlib import Path
+from asyncio.coroutines import iscoroutinefunction
 
 import yaml
 from discord import Intents
@@ -21,8 +23,14 @@ async def sync_command(ctx: Context) -> None:
 
 
 for path in Path("plugins").glob("[!_]*"):
-    exec(f"from plugins.{path.stem} import {path.stem} as command")
-    bot.hybrid_command(path.stem)(eval("command"))
-    exec("del command")
+    module = import_module(f"plugins.{path.stem}")
+    commands = getattr(module, "__discord_commands", set())
+    hybrid_commands = getattr(module, "__discord_hybrid_commands", set())
+    for command in commands:
+        bot.command()(command)
+    for hybrid_command in hybrid_commands:
+        print("注册hybrid指令:", hybrid_command)
+        bot.hybrid_command()(hybrid_command)
+
 
 bot.run(config["token"])

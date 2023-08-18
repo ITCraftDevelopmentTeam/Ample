@@ -9,14 +9,17 @@ import aiohttp
 from discord import File
 from discord.ext.commands import Context
 
+from ._command import hybrid_command
 from ._lang import text
 
 
+@hybrid_command
 async def pixiv(
     ctx: Context,
     pid: int,
     p: int = 0
 ) -> None:
+    """Get a image by pid."""
     ext = choice(["png", "jpg", "gif"])     # All of these are OK.
     url = text(".proxy-url", pid=pid, p=p, ext=ext)
     async with aiohttp.ClientSession() as session:

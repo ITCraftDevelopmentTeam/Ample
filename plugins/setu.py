@@ -8,9 +8,12 @@ import aiohttp
 from discord import File
 from discord.ext.commands import Context
 
+from ._command import hybrid_command
 from ._lang import text
 
+flag = True
 
+@hybrid_command
 async def setu(
     ctx: Context,
     r18: Literal["False", "True", "All"] = "False",
@@ -20,6 +23,7 @@ async def setu(
     tag: str = "",
     exclude_ai: bool = False
 ) -> None:
+    """Get a random sexy image."""
     if not ctx.channel.nsfw and r18 != "False":
         r18 = "False"
         await ctx.send(text(".sfw"))
