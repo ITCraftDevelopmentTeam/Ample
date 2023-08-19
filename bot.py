@@ -16,15 +16,15 @@ bot = Bot(command_prefix="$", intents=intents)
 
 @bot.command()
 async def sync_command(ctx: Context) -> None:
-    assert ctx.author.name in config["superusers"]
-    await bot.tree.sync()
-    await ctx.send(text("sync-command"))
+    if str(ctx.author) in config["superusers"]:
+        await bot.tree.sync()
+        await ctx.send(text("sync-command"))
 
 
 for path in Path("plugins").glob("[!_]*"):
     module = import_module(f"plugins.{path.stem}")
-    commands = getattr(module, "__discord_commands", set())
-    hybrid_commands = getattr(module, "__discord_hybrid_commands", set())
+    commands = getattr(module, "__commands", set())
+    hybrid_commands = getattr(module, "__hybrid_commands", set())
 
     for command in commands:
         bot.add_command(Command(command))
