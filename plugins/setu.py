@@ -63,7 +63,7 @@ async def setu(
             async with session.get(url) as response:
                 content = await response.read()
 
-            if len(content) == 58:
+            if not response.headers["Content-Type"].startswith("image/"):
                 url = _text("pixiv.proxy-url", **pic)
                 async with session.get(url) as response:
                     content = await response.read()
