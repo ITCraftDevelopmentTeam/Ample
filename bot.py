@@ -1,10 +1,9 @@
 from importlib import import_module
 from pathlib import Path
-from asyncio.coroutines import iscoroutinefunction
 
 import yaml
 from discord import Intents
-from discord.ext.commands import Bot, Context
+from discord.ext.commands import Bot, Context, Command, HybridCommand
 
 from plugins._lang import text
 
@@ -26,10 +25,11 @@ for path in Path("plugins").glob("[!_]*"):
     module = import_module(f"plugins.{path.stem}")
     commands = getattr(module, "__discord_commands", set())
     hybrid_commands = getattr(module, "__discord_hybrid_commands", set())
+
     for command in commands:
-        bot.command()(command)
+        bot.add_command(Command(command))
     for hybrid_command in hybrid_commands:
-        bot.hybrid_command()(hybrid_command)
+        bot.add_command(HybridCommand(hybrid_command))
 
 
 bot.run(config["token"])
