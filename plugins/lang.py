@@ -7,5 +7,5 @@ from ._lang import text, LangTag, lang_users
 @hybrid_command
 async def lang(ctx: Context, lang: LangTag) -> None:
     """Set your local language."""
-    lang_users[ctx.author.name] = lang
+    lang_users[str(ctx.author)] = lang
     await ctx.send(text(".set", lang=lang))
