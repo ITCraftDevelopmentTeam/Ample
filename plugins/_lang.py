@@ -49,7 +49,7 @@ def parse(__string: str, __lang: LangType = None, /, **kwargs: Any) -> str:
         try:
             return str(eval(match[1].strip(), {
                 "__lang__": lang,
-                "text": partial(text, lang, **kwargs),
+                "text": partial(text, __lang=lang, **kwargs),
                 **kwargs
             }))
         except Exception:
@@ -65,13 +65,13 @@ def parse(__string: str, __lang: LangType = None, /, **kwargs: Any) -> str:
 def text(
     __key: str,
     __lang: Optional[LangType] = None,
-    /, *,
+    *,
     escape_blank_key: bool = True,
     **kwargs: Any
 ) -> Optional[Any]:
     caller = sys._getframe(1)
     if __lang is None and "ctx" in caller.f_locals.keys():
-        __lang = caller.f_locals["ctx"]
+        __lang = kwargs["ctx"] = caller.f_locals["ctx"]
     lang, key = get_lang(__lang), __key
     if key.startswith("."):     # `.xxx` -> `{command}.xxx`
         key = cast(str, caller.f_globals["__name__"]).split(".")[-1] + key

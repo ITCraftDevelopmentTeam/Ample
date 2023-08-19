@@ -1,5 +1,11 @@
 sync-command: "指令同步成功"
 
+rank: |-
+  {{$
+    (f"**{name}**" if name == str(ctx.author) else name) + f": `{count}`"
+    for name, count in rank.items()
+  $}}
+
 lang:
   set: "已成功设置语言为：{{ lang }}"
 
@@ -19,6 +25,7 @@ setu:
     URL: `{{ url }}`
   filename: "{{ pid }}_p{{ p }}.{{ ext }}"
   description: "{{ ' '.join(tags) }}"
+  rank: "{{% rank %}}"
 
 pixiv:
   no-exist: "图片不存在"
